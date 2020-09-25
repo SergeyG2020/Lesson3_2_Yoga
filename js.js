@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    info.addEventListener('click', function(event) {
+    info.addEventListener('click', function (event) {
         let target = event.target;
 
         if (target && target.classList.contains('info-header-tab')) {
@@ -40,4 +40,60 @@ window.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    //Timer
+
+    let endOfPeriod = '2020-09-26';
+
+    function getTimeRemaining(endtime) {
+        let t = Date.parse(endtime) - Date.parse(new Date()),
+            seconds = Math.floor((t / 1000) % 60),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            hours = Math.floor((t / (1000 * 60 * 60) % 60)),
+            days = Math.floor(t / (1000 * 60 * 60 * 24));
+
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    }
+
+    function setClock(id, endtime) {
+        let timer = document.getElementById(id),
+            days = timer.querySelector('.days'),
+            hours = timer.querySelector('.hours'),
+            minutes = timer.querySelector('.minutes'),
+            seconds = timer.querySelector('.seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+        console.log(days);
+
+        function updateClock() {
+            let t = getTimeRemaining(endtime);
+            if (t.total <= 0) {
+                days.textContent = '0';
+                hours.textContent = '00';
+                minutes.textContent = '00';
+                seconds.textContent = '00';
+            } else {
+                function addZero (num) {
+                    if (num<=9) {
+                        return  '0' + num;
+                    } else return num;
+                };
+                days.textContent = t.days;
+                hours.textContent = addZero(t.hours);
+                minutes.textContent = addZero(t.minutes);
+                seconds.textContent =  addZero(t.seconds);
+
+                if (t.total <= 0) {
+                    clearInterval(timeInterval);
+                }
+            }
+
+        }
+    }
+
+    setClock('timer', endOfPeriod);
 });
